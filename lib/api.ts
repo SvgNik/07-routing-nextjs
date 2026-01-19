@@ -21,12 +21,28 @@ interface FetchNotesParams {
   page: number;
   perPage: number;
   search?: string;
+  tag?: string;
 }
 
-export const fetchNotes = async (
-  params: FetchNotesParams,
-): Promise<FetchNotesResponse> => {
-  const { data } = await noteApi.get<FetchNotesResponse>("/notes", { params });
+export const fetchNotes = async ({
+  page,
+  perPage,
+  search,
+  tag,
+}: FetchNotesParams): Promise<FetchNotesResponse> => {
+  const queryParams: FetchNotesParams = {
+    page,
+    perPage,
+    search,
+  };
+
+  if (tag && tag !== "all") {
+    queryParams.tag = tag;
+  }
+
+  const { data } = await noteApi.get<FetchNotesResponse>("/notes", {
+    params: queryParams,
+  });
   return data;
 };
 
