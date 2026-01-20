@@ -12,10 +12,7 @@ interface PageProps {
 
 export default async function NotesFilterPage({ params }: PageProps) {
   const resolvedParams = await params;
-  const slug =
-    resolvedParams.slug && resolvedParams.slug.length > 0
-      ? resolvedParams.slug[0]
-      : "all";
+  const slug = resolvedParams.slug?.[0] || "all";
 
   const queryClient = new QueryClient();
   const PER_PAGE = 6;
@@ -28,7 +25,7 @@ export default async function NotesFilterPage({ params }: PageProps) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NotesClient key={slug} />
+      <NotesClient key={slug} tag={slug} />
     </HydrationBoundary>
   );
 }

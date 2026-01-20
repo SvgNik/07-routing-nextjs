@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Providers from "./Providers"; 
+import Providers from "./Providers";
+import Header from "@/components/Header/Header";
+import Footer from "@/components/Footer/Footer";
 
 export const metadata: Metadata = {
   title: "NoteHub",
-  description: "Manage your notes",
+  description: "Manage your notes efficiently",
 };
 
 export default function RootLayout({
@@ -18,8 +20,12 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          {children}
-          {modal}
+          <Header />
+          <main>
+            {children}
+            {modal}
+          </main>
+          <Footer />
         </Providers>
       </body>
     </html>

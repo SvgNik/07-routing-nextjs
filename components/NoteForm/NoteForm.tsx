@@ -7,7 +7,7 @@ import { CreateNoteData } from "@/types/note";
 import css from "./NoteForm.module.css";
 
 interface NoteFormProps {
-  onCancel: () => void;
+  onClose: () => void;
 }
 
 const validationSchema = Yup.object().shape({
@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
     .required("Title is required"),
   content: Yup.string().max(500, "Maximum 500 characters"),
   tag: Yup.string()
-    .oneOf(["Todo", "Work", "Personal", "Meeting", "Shopping"], "Invalid tag")
+    .oneOf(["Todo", "Doing", "Done"], "Invalid tag")
     .required("Tag is required"),
 });
 
@@ -27,14 +27,14 @@ const initialValues: CreateNoteData = {
   tag: "Todo",
 };
 
-const NoteForm = ({ onCancel }: NoteFormProps) => {
+const NoteForm = ({ onClose }: NoteFormProps) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
-      onCancel();
+      onClose();
     },
     onError: (err: Error) => {
       alert(`Error creating note: ${err.message}`);
@@ -89,10 +89,8 @@ const NoteForm = ({ onCancel }: NoteFormProps) => {
             </label>
             <Field as="select" name="tag" id="tag" className={css.select}>
               <option value="Todo">Todo</option>
-              <option value="Work">Work</option>
-              <option value="Personal">Personal</option>
-              <option value="Meeting">Meeting</option>
-              <option value="Shopping">Shopping</option>
+              <option value="Doing">Doing</option>
+              <option value="Done">Done</option>
             </Field>
             <ErrorMessage name="tag" component="div" className={css.error} />
           </div>
@@ -101,7 +99,7 @@ const NoteForm = ({ onCancel }: NoteFormProps) => {
             <button
               type="button"
               className={css.cancelButton}
-              onClick={onCancel}
+              onClick={onClose}
             >
               Cancel
             </button>

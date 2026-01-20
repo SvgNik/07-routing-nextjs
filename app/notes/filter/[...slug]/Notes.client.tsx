@@ -1,25 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 import { fetchNotes } from "@/lib/api";
 import NoteList from "@/components/NoteList/NoteList";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import Pagination from "@/components/Pagination/Pagination";
+import Modal from "@/components/Modal/Modal";
+import NoteForm from "@/components/NoteForm/NoteForm";
 import css from "@/app/notes/Notes.module.css";
 
-const NotesFilterClient = () => {
-  const params = useParams();
+interface NotesFilterClientProps {
+  tag: string;
+}
+
+const NotesFilterClient = ({ tag }: NotesFilterClientProps) => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [debouncedSearch] = useDebounce(search, 300);
 
-  const slugParam = params?.slug;
-  const tag = Array.isArray(slugParam) ? slugParam[0] : "all";
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const PER_PAGE = 6;
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const handleSearch = (value: string) => {
     setSearch(value);
@@ -47,6 +53,11 @@ const NotesFilterClient = () => {
         <h1 className={css.title}>
           {tag === "all" ? "All Notes" : `${tag} Notes`}
         </h1>
+
+        <button className={css.createBtn} onClick={openModal}>
+          Create note +
+        </button>
+
         <SearchBox value={search} onChange={handleSearch} />
       </div>
 
@@ -73,6 +84,10 @@ const NotesFilterClient = () => {
       ) : (
         !isLoading && !isError && <p className={css.empty}>No notes found</p>
       )}
+
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <NoteForm onClose={closeModal} />
+      </Modal>
     </div>
   );
 };
