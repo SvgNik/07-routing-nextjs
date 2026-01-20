@@ -16,10 +16,7 @@ const Sidebar = () => {
 
           {TAGS.map((tag) => (
             <li key={tag} className={css.item}>
-              <Link
-                href={`/notes/filter/${tag.toLowerCase()}`}
-                className={css.link}
-              >
+              <Link href={`/notes/filter/${tag}`} className={css.link}>
                 {tag}
               </Link>
             </li>
