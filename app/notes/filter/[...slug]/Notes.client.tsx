@@ -16,7 +16,7 @@ const NotesFilterClient = () => {
   const [search, setSearch] = useState("");
   const [debouncedSearch] = useDebounce(search, 300);
 
-  const slugParam = params?.slug; 
+  const slugParam = params?.slug;
   const tag = Array.isArray(slugParam) ? slugParam[0] : "all";
 
   const PER_PAGE = 6;
