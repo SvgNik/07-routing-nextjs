@@ -35,7 +35,9 @@ const NotePreview = ({ id }: NotePreviewProps) => {
             </div>
             <p className={css.content}>{note.content}</p>
             <p className={css.date}>
-              {new Date(note.date).toLocaleDateString()}
+              {note.createdAt
+                ? new Date(note.createdAt).toLocaleDateString()
+                : "Дата відсутня"}
             </p>
           </>
         ) : (
